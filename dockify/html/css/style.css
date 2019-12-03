@@ -1,0 +1,39 @@
+.main-section{
+
+}
+
+.card-product{
+     margin-top: 3em;
+     width: 17rem;   
+}
+
+
+@media (max-width: 576px) { 
+.card-product{
+     width: 100%;   
+}
+}
+
+@media (min-width: 576px) { 
+.card-product{
+     width: 100%;   
+} 
+}
+
+@media (min-width: 768px) { 
+.card-product{
+     width: 100%;   
+} 
+}
+
+@media (min-width: 992px) { 
+.card-product{
+     width: 100%;   
+}
+}
+
+@media (min-width: 1200px) { 
+.card-product{
+     width: 100%;   
+} 
+}
