@@ -1,0 +1,46 @@
+.from-field{
+     margin-top:2em;
+     padding: 2em;
+     background-color: #4E5D6C !important;
+}
+
+.card-list{
+     padding: 0 !important;
+     list-style-type: none; 
+}
+
+.card-product{
+     margin-top: 3em;
+     width: 17rem;   
+}
+
+
+@media (max-width: 576px) { 
+.card-product{
+     width: 100%;   
+}
+}
+
+@media (min-width: 576px) { 
+.card-product{
+     width: 100%;   
+} 
+}
+
+@media (min-width: 768px) { 
+.card-product{
+     width: 100%;   
+} 
+}
+
+@media (min-width: 992px) { 
+.card-product{
+     width: 100%;   
+}
+}
+
+@media (min-width: 1200px) { 
+.card-product{
+     width: 100%;   
+} 
+}

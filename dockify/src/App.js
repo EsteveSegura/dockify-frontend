@@ -9,14 +9,20 @@ import {
   Link
 } from "react-router-dom";
 
-import Index from './Pages/Index';
+import Clients from './Pages/Clients/Clients';
+import AddClient from './Pages/AddClient/AddClient';
+import Nav from './Components/nav/Nav';
 
 function App() {
   return (
     <Router>
+      <Nav title="Merce Miniaturas" />
       <Switch>
         <Route exact path="/"> 
-          <Index />
+          <Clients />
+        </Route>
+        <Route exact path="/add/client"> 
+          <AddClient />
         </Route>
       </Switch>
     </Router>
