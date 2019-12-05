@@ -6,7 +6,7 @@ class Card extends React.Component {
      render() {
           return (
                <div className="col-xl-3 col-lg-4 col-md-6 col-sm-12">
-                    <div className="card card-product" >
+                    <div className="card card-client" >
                          <div className="card-body">
                               <h5 className="card-title"><strong>{this.props.name}</strong></h5>
                               <ul className="text-left card-list">

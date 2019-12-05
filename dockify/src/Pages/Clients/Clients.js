@@ -3,8 +3,9 @@ import Bootstrap from '../CommonFiles/style.css';
 import Style from '../CommonFiles/bootstrap.min.css';
 import axios from 'axios';
 
+import ActionButton from '../../Components/actionButton/ActionButton';
 import Card from '../../Components/cardClient/CardClient'
-
+import { withRouter } from "react-router-dom";
 
 class Clients extends React.Component {
      constructor(props) {
@@ -12,6 +13,12 @@ class Clients extends React.Component {
           this.state = {
                clients: []
           };
+
+          this.goAddClient = this.goAddClient.bind(this)
+     }
+
+     goAddClient(){
+          this.props.history.push("/add/client");
      }
 
      componentDidMount() {
@@ -33,6 +40,15 @@ class Clients extends React.Component {
                <div>
                     <div className="container main-section">
                          <div className="row">
+                              <div className="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                                   <ActionButton 
+                                        text="Add new client"
+                                        type="primary"
+                                        callback={this.goAddClient}
+                                   />
+                              </div>
+                         </div>
+                         <div className="row">
                               {this.state.clients.map(client => (
                                    <Card
                                         clientId={client._id}
@@ -50,4 +66,4 @@ class Clients extends React.Component {
      }
 }
 
-export default Clients
+export default withRouter(Clients)

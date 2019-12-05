@@ -31,14 +31,16 @@ class EditClient extends React.Component {
 
      render() {
           return (
-               <div>
-                    <FormEditClient
-                         clientId={this.props.match.params.clientId}
-                         name={this.state.client.name}
-                         socialNetwork={this.state.client.socialNetwork}
-                         country={this.state.client.country}
-                         address={this.state.client.address}
-                    />
+               <div className="container">
+                    <div className="row">
+                         <FormEditClient
+                              clientId={this.props.match.params.clientId}
+                              name={this.state.client.name}
+                              socialNetwork={this.state.client.socialNetwork}
+                              country={this.state.client.country}
+                              address={this.state.client.address}
+                         />
+                    </div>
                </div>
           );
      }
