@@ -19,11 +19,9 @@ class Clients extends React.Component {
                     "authorization": "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoicm9vdCIsImFkbWluIjp0cnVlLCJpYXQiOjE1NzUzMzQ0NTB9.sy10tqPv2n4VKGvUSw88iN3kglVY3wzm1vunXtEAC2Q"
                }
           }).then((response) => {
-               let clients = response.data
                this.setState({
                     clients: response.data
                });
-               console.log(response.data)
           }, (error) => {
                //Handle ERROR
           });
@@ -36,6 +34,7 @@ class Clients extends React.Component {
                          <div className="row">
                               {this.state.clients.map(client => (
                                    <Card
+                                        clientId = {client._id}
                                         name = {client.name}
                                         socialNetwork = {client.socialNetwork}
                                         country = {client.country}

@@ -17,7 +17,7 @@ function Nav(props) {
                               <Link className="nav-link" to="/">Home</Link>
                          </li>
                          <li className="nav-item">
-                              <Link className="nav-link" to="/add/client">Añadir Cliente</Link>
+                              <Link className="nav-link" to="/add/client">Añadir Cliente</Link >
                          </li>
                     </ul>
                </div>

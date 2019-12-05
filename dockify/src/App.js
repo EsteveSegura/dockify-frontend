@@ -1,28 +1,30 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 
 import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link
 } from "react-router-dom";
 
 import Clients from './Pages/Clients/Clients';
 import AddClient from './Pages/AddClient/AddClient';
+import EditClient from './Pages/EditClient/EditClient';
 import Nav from './Components/nav/Nav';
 
 function App() {
   return (
     <Router>
-      <Nav title="Merce Miniaturas" />
+      <Nav title="Dockify" />
       <Switch>
         <Route exact path="/"> 
           <Clients />
         </Route>
         <Route exact path="/add/client"> 
           <AddClient />
+        </Route>
+        <Route exact path="/edit/client/:clientId"> 
+          {(props) => <EditClient {...props} />}
         </Route>
       </Switch>
     </Router>

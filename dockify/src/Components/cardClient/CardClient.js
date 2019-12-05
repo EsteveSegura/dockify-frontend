@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { Link } from "react-router-dom";
+
 class Card extends React.Component {
      render (){
           return(
@@ -12,7 +14,7 @@ class Card extends React.Component {
                                    <li><strong>Pais:</strong> {this.props.country}</li>
                                    <li><strong>Dirección:</strong> {this.props.address}</li>
                               </ul>
-                              <a href="#" className="btn btn-primary">Edit</a>
+                              <Link to={'/edit/client/' + this.props.clientId} className="btn btn-primary">Edit</Link>
                          </div>
                     </div>
                </div>

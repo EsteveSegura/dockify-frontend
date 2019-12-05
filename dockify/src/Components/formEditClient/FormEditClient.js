@@ -1,11 +1,13 @@
 import React from 'react';
 import axios from 'axios';
+import { withRouter } from "react-router-dom";
 
-class FormAddClient extends React.Component {
+class FormEditClient extends React.Component {
      constructor(props) {
           super(props);
 
           this.state = {
+               clientId: '',
                name: '',
                socialNetwork: '',
                country: '',
@@ -14,7 +16,17 @@ class FormAddClient extends React.Component {
 
           this.handleChange = this.handleChange.bind(this);
           this.handleSubmit = this.handleSubmit.bind(this);
+     }
 
+     componentWillReceiveProps(nextProps) {
+          this.setState({
+               clientId: this.props.idClient,
+               name: nextProps.name,
+               socialNetwork: nextProps.socialNetwork,
+               country: nextProps.country,
+               address: nextProps.address
+          })
+          console.log(nextProps)
      }
 
      handleChange(event) {
@@ -36,18 +48,20 @@ class FormAddClient extends React.Component {
      }
 
      handleSubmit(event) {
-          axios.post('http://localhost:3001/api/client/', this.state ,{ 
+          console.log(this.props.clientId)
+          axios.put(`http://localhost:3001/api/client/${this.props.clientId}`, this.state, {
                headers: {
                     "authorization": "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoicm9vdCIsImFkbWluIjp0cnVlLCJpYXQiOjE1NzUzMzQ0NTB9.sy10tqPv2n4VKGvUSw88iN3kglVY3wzm1vunXtEAC2Q"
                }
           }).then(function (response) {
-                    console.log(response);
-               })
+               console.log(response);
+          })
                .catch(function (error) {
                     console.log(error);
                });
 
           event.preventDefault();
+          this.props.history.push("/");
      }
 
      render() {
@@ -56,25 +70,26 @@ class FormAddClient extends React.Component {
                     <form onSubmit={this.handleSubmit}>
                          <div className="form-group">
                               <label for="name">Nombre</label>
-                              <input type="text" className="form-control" id="name" placeholder="Nombre" onChange={this.handleChange} />
+                              <input type="text" value={this.state.name} className="form-control" id="name" placeholder="Nombre" onChange={this.handleChange} />
                          </div>
                          <div className="form-group">
                               <label for="socialNetwork">Red Social</label>
-                              <input type="text" className="form-control" id="socialNetwork" placeholder="Red Social" onChange={this.handleChange} />
+                              <input type="text" value={this.state.socialNetwork} className="form-control" id="socialNetwork" placeholder="Red Social" onChange={this.handleChange} />
                          </div>
                          <div className="form-group">
                               <label for="country">Pais</label>
-                              <input type="text" className="form-control" id="country" placeholder="Pais" onChange={this.handleChange} />
+                              <input type="text" value={this.state.country} className="form-control" id="country" placeholder="Pais" onChange={this.handleChange} />
                          </div>
                          <div className="form-group">
                               <label for="address">Example textarea</label>
-                              <textarea className="form-control" id="address" rows="3" placeholder="Dirección" onChange={this.handleChange}></textarea>
+                              <textarea className="form-control" id="address" rows="3" placeholder="Dirección" value={this.state.address} onChange={this.handleChange}></textarea>
                          </div>
-                         <button type="submit" className="btn btn-primary">Enviar</button>
+                         <button type="submit" className="btn btn-primary">Editar</button>
+                         <button type="button" className="btn btn-primary">Eliminar</button>
                     </form>
                </div>
           );
      }
 }
 
-export default FormAddClient
+export default withRouter(FormEditClient)
