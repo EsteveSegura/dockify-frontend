@@ -11,7 +11,8 @@ class FormEditClient extends React.Component {
                name: '',
                socialNetwork: '',
                country: '',
-               address: ''
+               address: '',
+               dataIsEdited: false
           }
 
           this.handleChange = this.handleChange.bind(this);
@@ -25,11 +26,12 @@ class FormEditClient extends React.Component {
                socialNetwork: nextProps.socialNetwork,
                country: nextProps.country,
                address: nextProps.address
-          })
-          console.log(nextProps)
-     }
+          });
+     }  
 
      handleChange(event) {
+          this.setState({dataIsEdited : true})
+          console.log(this.state)
           switch (event.target.id) {
                case 'name':
                     this.setState({ name: event.target.value })
@@ -44,23 +46,17 @@ class FormEditClient extends React.Component {
                     this.setState({ address: event.target.value })
                     break;
           }
-          console.log(this.state)
      }
 
      handleSubmit(event) {
-          console.log(this.props.clientId)
-          axios.put(`http://localhost:3001/api/client/${this.props.clientId}`, this.state, {
-               headers: {
-                    "authorization": "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoicm9vdCIsImFkbWluIjp0cnVlLCJpYXQiOjE1NzUzMzQ0NTB9.sy10tqPv2n4VKGvUSw88iN3kglVY3wzm1vunXtEAC2Q"
-               }
-          }).then(function (response) {
-               console.log(response);
-          })
-               .catch(function (error) {
-                    console.log(error);
-               });
-
           event.preventDefault();
+          if(this.state.dataIsEdited){
+               axios.put(`http://localhost:3001/api/client/${this.props.clientId}`, this.state, {
+                    headers: {
+                         "authorization": "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoicm9vdCIsImFkbWluIjp0cnVlLCJpYXQiOjE1NzUzMzQ0NTB9.sy10tqPv2n4VKGvUSw88iN3kglVY3wzm1vunXtEAC2Q"
+                    }
+               })
+          }
           this.props.history.push("/");
      }
 

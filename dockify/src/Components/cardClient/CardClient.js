@@ -3,8 +3,8 @@ import React from 'react';
 import { Link } from "react-router-dom";
 
 class Card extends React.Component {
-     render (){
-          return(
+     render() {
+          return (
                <div className="col-xl-3 col-lg-4 col-md-6 col-sm-12">
                     <div className="card card-product" >
                          <div className="card-body">

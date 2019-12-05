@@ -5,6 +5,7 @@ import axios from 'axios';
 
 import Card from '../../Components/cardClient/CardClient'
 
+
 class Clients extends React.Component {
      constructor(props) {
           super(props);
@@ -23,7 +24,7 @@ class Clients extends React.Component {
                     clients: response.data
                });
           }, (error) => {
-               //Handle ERROR
+               console.log(error)
           });
      }
 
@@ -34,11 +35,11 @@ class Clients extends React.Component {
                          <div className="row">
                               {this.state.clients.map(client => (
                                    <Card
-                                        clientId = {client._id}
-                                        name = {client.name}
-                                        socialNetwork = {client.socialNetwork}
-                                        country = {client.country}
-                                        address = {client.address}
+                                        clientId={client._id}
+                                        name={client.name}
+                                        socialNetwork={client.socialNetwork}
+                                        country={client.country}
+                                        address={client.address}
                                    />
                               ))}
                          </div>

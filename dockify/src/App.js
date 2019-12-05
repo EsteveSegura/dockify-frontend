@@ -17,13 +17,13 @@ function App() {
     <Router>
       <Nav title="Dockify" />
       <Switch>
-        <Route exact path="/"> 
+        <Route exact path="/">
           <Clients />
         </Route>
-        <Route exact path="/add/client"> 
+        <Route exact path="/add/client">
           <AddClient />
         </Route>
-        <Route exact path="/edit/client/:clientId"> 
+        <Route exact path="/edit/client/:clientId">
           {(props) => <EditClient {...props} />}
         </Route>
       </Switch>

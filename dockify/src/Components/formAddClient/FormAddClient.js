@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import { withRouter } from "react-router-dom";
 
 class FormAddClient extends React.Component {
      constructor(props) {
@@ -16,6 +17,8 @@ class FormAddClient extends React.Component {
           this.handleSubmit = this.handleSubmit.bind(this);
 
      }
+
+
 
      handleChange(event) {
           switch (event.target.id) {
@@ -48,6 +51,7 @@ class FormAddClient extends React.Component {
                });
 
           event.preventDefault();
+          this.props.history.push("/");
      }
 
      render() {
@@ -56,19 +60,19 @@ class FormAddClient extends React.Component {
                     <form onSubmit={this.handleSubmit}>
                          <div className="form-group">
                               <label for="name">Nombre</label>
-                              <input type="text" className="form-control" id="name" placeholder="Nombre" onChange={this.handleChange} />
+                              <input type="text" value={this.state.name} className="form-control" id="name" placeholder="Nombre" onChange={this.handleChange} />
                          </div>
                          <div className="form-group">
                               <label for="socialNetwork">Red Social</label>
-                              <input type="text" className="form-control" id="socialNetwork" placeholder="Red Social" onChange={this.handleChange} />
+                              <input type="text" value={this.state.socialNetwork} className="form-control" id="socialNetwork" placeholder="Red Social" onChange={this.handleChange} />
                          </div>
                          <div className="form-group">
                               <label for="country">Pais</label>
-                              <input type="text" className="form-control" id="country" placeholder="Pais" onChange={this.handleChange} />
+                              <input type="text" value={this.state.country} className="form-control" id="country" placeholder="Pais" onChange={this.handleChange} />
                          </div>
                          <div className="form-group">
                               <label for="address">Example textarea</label>
-                              <textarea className="form-control" id="address" rows="3" placeholder="Dirección" onChange={this.handleChange}></textarea>
+                              <textarea className="form-control" value={this.state.address} id="address" rows="3" placeholder="Dirección" onChange={this.handleChange}></textarea>
                          </div>
                          <button type="submit" className="btn btn-primary">Enviar</button>
                     </form>
@@ -77,4 +81,4 @@ class FormAddClient extends React.Component {
      }
 }
 
-export default FormAddClient
+export default withRouter(FormAddClient)
