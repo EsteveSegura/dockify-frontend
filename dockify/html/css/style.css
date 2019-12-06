@@ -1,5 +1,12 @@
-.main-section{
+.from-field{
+     margin-top:2em;
+     padding: 2em;
+     background-color: #4E5D6C !important;
+}
 
+.card-list{
+     padding: 0 !important;
+     list-style-type: none; 
 }
 
 .card-product{

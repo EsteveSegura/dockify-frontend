@@ -1,7 +1,4 @@
 import React from 'react';
-import Bootstrap from '../CommonFiles/style.css';
-import Style from '../CommonFiles/bootstrap.min.css';
-import axios from 'axios';
 
 import FormAddClient from '../../Components/formAddClient/FormAddClient';
 

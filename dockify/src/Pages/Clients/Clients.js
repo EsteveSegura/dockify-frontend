@@ -5,7 +5,7 @@ import axios from 'axios';
 
 import ActionButton from '../../Components/actionButton/ActionButton';
 import Card from '../../Components/cardClient/CardClient'
-import { withRouter } from "react-router-dom";
+import { withRouter } from 'react-router-dom';
 
 class Clients extends React.Component {
      constructor(props) {
@@ -17,7 +17,7 @@ class Clients extends React.Component {
           this.goAddClient = this.goAddClient.bind(this)
      }
 
-     goAddClient(){
+     goAddClient() {
           this.props.history.push("/add/client");
      }
 
@@ -37,31 +37,29 @@ class Clients extends React.Component {
 
      render() {
           return (
-               <div>
-                    <div className="container main-section">
-                         <div className="row">
-                              <div className="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-                                   <ActionButton 
-                                        text="Add new client"
-                                        type="primary"
-                                        callback={this.goAddClient}
-                                   />
-                              </div>
-                         </div>
-                         <div className="row">
-                              {this.state.clients.map(client => (
-                                   <Card
-                                        clientId={client._id}
-                                        name={client.name}
-                                        socialNetwork={client.socialNetwork}
-                                        country={client.country}
-                                        address={client.address}
-                                   />
-                              ))}
+               <div className="container main-section">
+                    <div className="row">
+                         <div className="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                              <ActionButton
+                                   text="Add new client"
+                                   type="primary"
+                                   callback={this.goAddClient}
+                              />
                          </div>
                     </div>
-
+                    <div className="row">
+                         {this.state.clients.map(client => (
+                              <Card
+                                   clientId={client._id}
+                                   name={client.name}
+                                   socialNetwork={client.socialNetwork}
+                                   country={client.country}
+                                   address={client.address}
+                              />
+                         ))}
+                    </div>
                </div>
+
           );
      }
 }
