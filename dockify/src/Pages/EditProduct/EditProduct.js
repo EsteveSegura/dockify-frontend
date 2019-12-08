@@ -26,6 +26,7 @@ class EditProduct extends React.Component {
                     "authorization": "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoicm9vdCIsImFkbWluIjp0cnVlLCJpYXQiOjE1NzUzMzQ0NTB9.sy10tqPv2n4VKGvUSw88iN3kglVY3wzm1vunXtEAC2Q"
                }
           });
+          console.log(this.state.price)
           return response.data[0]
      }
 
@@ -33,7 +34,15 @@ class EditProduct extends React.Component {
           return (
                <div className="container">
                     <div className="row">
-               <h1>{this.props.match.params.productId}</h1>
+                         <FormEditProduct
+                              productId={this.props.match.params.productId}
+                              internalName={this.state.product.internalName}
+                              publicName={this.state.product.publicName}
+                              description={this.state.product.description}
+                              quantity={this.state.product.quantity}
+                              price={this.state.product.price}
+                              productPicture={this.state.product.productPicture}
+                         />
                     </div>
                </div>
           );

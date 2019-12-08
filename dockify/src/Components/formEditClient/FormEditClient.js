@@ -33,7 +33,6 @@ class FormEditClient extends React.Component {
 
      handleChange(event) {
           this.setState({ dataIsEdited: true })
-          console.log(this.state)
           switch (event.target.id) {
                case 'name':
                     this.setState({ name: event.target.value })

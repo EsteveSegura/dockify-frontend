@@ -19,6 +19,9 @@ function Nav(props) {
                          <li className="nav-item active">
                               <Link className="nav-link" to="/products">Products</Link>
                          </li>
+                         <li className="nav-item active">
+                              <Link className="nav-link" to="/sales">Sales</Link>
+                         </li>
                     </ul>
                </div>
           </nav>

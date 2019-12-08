@@ -8,12 +8,14 @@ import {
 } from "react-router-dom";
 
 import Nav from './Components/nav/Nav';
+import Sales from './Pages/Sales/Sales';
 import Clients from './Pages/Clients/Clients';
+import Products from './Pages/Products/Products';
 import AddClient from './Pages/AddClient/AddClient';
+import AddSale from './Pages/AddSale/AddSale';
 import AddProduct from './Pages/AddProduct/AddProduct';
 import EditClient from './Pages/EditClient/EditClient';
 import EditProduct from './Pages/EditProduct/EditProduct';
-import Products from './Pages/Products/Products';
 
 function App() {
   return (
@@ -26,17 +28,23 @@ function App() {
         <Route exact path="/add/client">
           <AddClient />
         </Route>
-        <Route exact path="/add/product">
-          <AddProduct />
-        </Route>
         <Route exact path="/edit/client/:clientId">
           {(props) => <EditClient {...props} />}
         </Route>
-        <Route exact path="/edit/product/:productId">
-          {(props) => <EditProduct {...props} />}
+        <Route exact path="/sales">
+          <Sales />
+        </Route>
+        <Route exact path="/add/sale">
+          <AddSale />
         </Route>
         <Route exact path="/products">
           <Products />
+        </Route>
+        <Route exact path="/add/product">
+          <AddProduct />
+        </Route>
+        <Route exact path="/edit/product/:productId">
+          {(props) => <EditProduct {...props} />}
         </Route>
       </Switch>
     </Router>

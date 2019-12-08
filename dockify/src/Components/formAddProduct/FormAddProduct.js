@@ -63,7 +63,6 @@ class FormAddProducts extends React.Component {
                console.log(error);
           });
           
-          alert("HAPNNG")
           event.preventDefault();
           this.props.history.push("/");
      }
