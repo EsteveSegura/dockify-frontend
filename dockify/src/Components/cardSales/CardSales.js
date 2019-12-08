@@ -6,7 +6,7 @@ import axios from 'axios';
 class CardSales extends React.Component {
      constructor(props) {
           super(props);
-
+          console.log(this.props)
           this.state = {
                client: {},
                products: []

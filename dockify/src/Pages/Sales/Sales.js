@@ -51,15 +51,16 @@ class Sales extends React.Component {
                     {this.state.sales.map(sale => (
 
                          <CardSales 
-                         idClient = {sale.idClient}
-                         isPaid = {sale.isPaid}
-                         isShipped = {sale.isShipped}
-                         discount = {sale.discount}
-                         shipCost = {sale.shipCost}
-                         productsCost = {sale.productsCost}
-                         shipDate = {sale.shipDate}
-                         idProduct = {sale.idProduct}
-                         address = {sale.address}
+                              saleId = {sale._id}
+                              idClient = {sale.idClient}
+                              isPaid = {sale.isPaid}
+                              isShipped = {sale.isShipped}
+                              discount = {sale.discount}
+                              shipCost = {sale.shipCost}
+                              productsCost = {sale.productsCost}
+                              shipDate = {sale.shipDate}
+                              idProduct = {sale.idProduct}
+                              address = {sale.address}
                          />
                     ))}
                </div>

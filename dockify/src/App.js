@@ -16,6 +16,7 @@ import AddSale from './Pages/AddSale/AddSale';
 import AddProduct from './Pages/AddProduct/AddProduct';
 import EditClient from './Pages/EditClient/EditClient';
 import EditProduct from './Pages/EditProduct/EditProduct';
+import EditSale from './Pages/EditSale/EditSale';
 
 function App() {
   return (
@@ -45,6 +46,9 @@ function App() {
         </Route>
         <Route exact path="/edit/product/:productId">
           {(props) => <EditProduct {...props} />}
+        </Route>
+        <Route exact path="/edit/sale/:saleId">
+          {(props) => <EditSale {...props} />}
         </Route>
       </Switch>
     </Router>
