@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { Link } from 'react-router-dom';
+import Slider from '../../Components/Slider/Slider';
 import axios from 'axios';
 
 class CardSales extends React.Component {
@@ -15,6 +16,7 @@ class CardSales extends React.Component {
           this.getInfoClient = this.getInfoClient.bind(this);
           this.displayProducts = this.displayProducts.bind(this);
           this.getInfoProducts = this.getInfoProducts.bind(this);
+          this.formatDate = this.formatDate.bind(this);
      }
 
      async getInfoClient() {
@@ -47,16 +49,31 @@ class CardSales extends React.Component {
           })
      }
 
-     displayProducts(){
+     formatDate(date) {
+          let monthNames = [
+               "Enero", "Febrero", "Maroz",
+               "Abril", "Mayo", "Junio", "Julio",
+               "Agosto", "Septiembre", "Octubre",
+               "Noviembre", "Diciembre"
+          ];
+
+          var day = date.getDate();
+          var monthIndex = date.getMonth();
+          var year = date.getFullYear();
+
+          return day + ' ' + monthNames[monthIndex] + ' ' + year;
+     }
+
+     displayProducts() {
           let data = {
-               namesInline:'',
-               names:[],
-               pictures:[]
+               namesInline: '',
+               names: [],
+               pictures: []
           }
           this.state.products.map((product) => {
                data.names.push(product.internalName)
                data.pictures.push(product.picturePath)
-               data.namesInline = data.namesInline + product.internalName +', '
+               data.namesInline = data.namesInline + product.internalName + ', '
           })
           return data
      }
@@ -76,6 +93,10 @@ class CardSales extends React.Component {
                     <div className="card card-client" >
 
                          <div className="card-body">
+                              <Slider
+                                   images={this.displayProducts().pictures}
+                              />
+
                               <h5 className="card-title"><strong>{this.props.publicName}</strong></h5>
                               <ul className="text-left card-list">
                                    <li><strong>Comprador:</strong> {this.state.client.name}</li>
@@ -84,13 +105,11 @@ class CardSales extends React.Component {
                                    <li><strong>Descuento:</strong> {this.props.discount}%</li>
                                    <li><strong>Coste Pedido:</strong> {this.props.shipCost}€</li>
                                    <li><strong>Coste Envio:</strong> {this.props.productsCost}€</li>
-                                   <li><strong>Fecha Envio:</strong> {this.props.shipDate}</li>
+                                   <li><strong>Fecha Envio:</strong> {this.formatDate(new Date(this.props.shipDate))}</li>
                                    <li><strong>Productos:</strong> {this.displayProducts().namesInline}</li>
                                    <li><strong>Dirección:</strong> {this.props.address}</li>
                                    <li><strong>Total:</strong> {this.props.productsCost + this.props.shipCost}€</li>
-                                   {this.displayProducts().pictures.map((picturePath) =>{
-                                       return <img src={'http://localhost:3001/'+picturePath} width={50}  alt="..." />                                        
-                                   })}
+
                               </ul>
                               <Link to={'/edit/sale/' + this.props.saleId} className="btn btn-primary">Edit</Link>
                          </div>
@@ -104,7 +123,9 @@ export default CardSales;
 
 /*
 
-
+                                   {this.displayProducts().pictures.map((picturePath) => {
+                                        return <img src={'http://localhost:3001/' + picturePath} width={50} alt="..." />
+                                   })}
 
 <img src={'http://localhost:3001/'+this.props.picturePath} class="card-img-top" alt="..." />
 

@@ -12,7 +12,7 @@ class FormAddProducts extends React.Component {
                isPaid: false,
                isShipped: false,
                discount: '0',
-               shipCost: '0',
+               shipCost: '9',
                productsCost: '0',
                shipDate: '',
                idProduct: [],
@@ -34,6 +34,7 @@ class FormAddProducts extends React.Component {
           this.filterAndFoundClient = this.filterAndFoundClient.bind(this)
           this.setClientId = this.setClientId.bind(this)
           this.setProducts = this.setProducts.bind(this)
+          this.removeProducts = this.removeProducts.bind(this)
      }
 
      handleChange(event) {
@@ -61,6 +62,20 @@ class FormAddProducts extends React.Component {
                case 'address':
                     this.setState({ address: event.target.value });
                     break;
+               case 'isPaid':
+                    if (event.target.value == "true") {
+                         this.setState({ isPaid: true });
+                    } else {
+                         this.setState({ isPaid: false });
+                    }
+                    break;
+               case 'isShipped':
+                    if (event.target.value == "true") {
+                         this.setState({ isShipped: true });
+                    } else {
+                         this.setState({ isShipped: false });
+                    }
+                    break;
 
           }
           console.log(this.state)
@@ -82,6 +97,7 @@ class FormAddProducts extends React.Component {
      }
 
      componentDidMount() {
+          console.log(this.state.isPaid)
           this.getAllClients()
           this.getAllProducts()
      }
@@ -145,7 +161,7 @@ class FormAddProducts extends React.Component {
                }
           })
 
-          this.setState({ idClient: event.target.id, idClientShow: event.target.innerHTML, suggestClient: [], clientSelected: event.target.innerHTML, address: selectedClient[0].address })
+          this.setState({ idClient: event.target.id, idClientShow: '', suggestClient: [], clientSelected: event.target.innerHTML, address: selectedClient[0].address })
      }
 
      setProducts(event) {
@@ -164,62 +180,109 @@ class FormAddProducts extends React.Component {
           }))
      }
 
+     removeProducts(event) {
+          event.preventDefault()
+          this.setState({ productsSelected: [] })
+     }
+
      render() {
           return (
-               <div className="from-field col-xl-12 col-lg-12 col-md-12 col-sm-12">
-                    <form onSubmit={this.handleSubmit}>
-                         <div className="form-group">
-                              <label for="idClientShow">Buscar Cliente</label>
-                              <input type="text" autocomplete="off" value={this.state.idClientShow} className="form-control" id="idClientShow" placeholder="Nombre interno" onChange={this.handleChange} />
-                              {this.state.suggestClient.map(sugest => {
-                                   return (<span id={sugest._id} onClick={this.setClientId}>
-                                        {sugest.name}
-                                   </span >)
-                              })}
-                         </div>
-                         <div>
-                              <span><strong>Cliente</strong></span><br />
-                              <span class="badge badge-primary">{this.state.clientSelected}</span>
-                         </div>
-                         <div className="form-group">
-                              <label for="idProductShow">Buscar Productos</label>
-                              <input type="text" autocomplete="off" value={this.state.idProductShow} className="form-control" id="idProductShow" placeholder="Producto" onChange={this.handleChange} />
-                              {this.state.suggestProducts.map(sugest => {
-                                   return (<span id={sugest._id} onClick={this.setProducts}>
-                                        {sugest.internalName}
-                                   </span>)
-                              })}
-                         </div>
-                         <div>
-                              <span><strong>Productos seleccionados</strong></span><br />
-                              {this.state.productsSelected.map((product) => {
-                                   return <span class="badge badge-primary mr-4">{product.name}</span>
-                              })}
-                         </div>
-                         <div className="form-group">
-                              <label for="shipCost">Coste Envio</label>
-                              <input type="number" value={this.state.shipCost} className="form-control" id="shipCost" placeholder="Cantidad" onChange={this.handleChange} />
-                         </div>
-                         <div className="form-group">
-                              <label for="productsCost">Coste Pedido</label>
-                              <input type="number" value={this.state.productsCost} className="form-control" id="productsCost" placeholder="Cantidad" onChange={this.handleChange} />
-                         </div>
-                         <div className="form-group">
-                              <label for="discount">Descuento</label>
-                              <input type="number" value={this.state.discount} className="form-control" id="discount" placeholder="Cantidad" onChange={this.handleChange} />
-                         </div>
-                         <div className="form-group">
-                              <label for="shipDate">Fecha de envio</label>
-                              <input type="date" value={this.state.shipDate} className="form-control" id="shipDate" placeholder="Cantidad" onChange={this.handleChange} />
-                         </div>
-                         <div className="form-group">
-                              <label for="address">dirección</label>
-                              <textarea className="form-control" value={this.state.address} id="address" rows="3" placeholder="Descripción" onChange={this.handleChange}></textarea>
-                         </div>
+               <React.Fragment>
+                    <div className="from-field mr-4 col-xl-3 col-lg-12 col-md-12 col-sm-12">
+                         <form>
+                              <div className="form-group">
+                                   <label for="idClientShow">Buscar Cliente</label>
+                                   <input type="text" autoComplete="off" value={this.state.idClientShow} className="form-control" id="idClientShow" placeholder="Nombre interno" onChange={this.handleChange} />
 
-                         <button type="submit" className="btn btn-primary">Enviar</button>
-                    </form>
-               </div>
+                              </div>
+                              <div className="mt-3 mb-3">
+                                   {this.state.suggestClient.map(sugest => {
+                                        return (<div className="badge-search" id={sugest._id} onClick={this.setClientId}>
+                                             {sugest.name}
+                                        </div>)
+                                   })}
+                              </div>
+                              <div>
+                              </div>
+                              <div className="form-group">
+                                   <label for="idProductShow">Buscar Productos</label>
+                                   <input type="text" autoComplete="off" value={this.state.idProductShow} className="form-control" id="idProductShow" placeholder="Producto" onChange={this.handleChange} />
+                              </div>
+                              {this.state.suggestProducts.map(sugest => {
+                                   return (<div id={sugest._id} className="badge-search mb-2" onClick={this.setProducts}>
+                                        {sugest.internalName}
+                                   </div>)
+                              })}
+                              <div className="mt-3">
+                                   <button className="btn btn-primary " onClick={this.removeProducts}>Remove Products</button>
+                              </div>
+
+                         </form>
+                    </div>
+                    <div className="from-field col-xl-8 col-lg-12 col-md-12 col-sm-12">
+
+                         <form onSubmit={this.handleSubmit}>
+                              <div className="form-group">
+                                   <label for="shipCost">Cliente</label>
+                                   <input type="text" value={this.state.clientSelected} className="form-control" id="shipCost" placeholder="Cantidad" onChange={this.handleChange} disabled />
+                              </div>
+                              <div className="form-group">
+                                   <div className="txt-input">Productos seleccionados</div>
+                                   {this.state.productsSelected.map((product) => {
+                                        return <div className="badge-search">{product.name}</div>
+                                   })}
+                              </div>
+                              <div className="form-group">
+                                   <label for="shipCost">Coste Envio</label>
+                                   <input type="number" value={this.state.shipCost} className="form-control" id="shipCost" placeholder="Cantidad" onChange={this.handleChange} />
+                              </div>
+                              <div className="form-group">
+                                   <label for="productsCost">Coste Pedido</label>
+                                   <input type="number" value={this.state.productsCost} className="form-control" id="productsCost" placeholder="Cantidad" onChange={this.handleChange} />
+                              </div>
+                              <div className="form-group">
+                                   <label for="discount">Descuento</label>
+                                   <input type="number" value={this.state.discount} className="form-control" id="discount" placeholder="Cantidad" onChange={this.handleChange} />
+                              </div>
+                              <div className="form-group">
+                                   <label for="isPaid">¿Esta pagado?</label>
+                                   <div className="isPaid">
+                                        <div className="form-check form-check-inline">
+                                             <input className="form-check-input" type="radio" name="isPaid" id="isPaid" value="true" checked={this.state.isPaid} onChange={this.handleChange} />
+                                             <label className="form-check-label" for="inlineRadio1">Si</label>
+                                        </div>
+                                        <div className="form-check form-check-inline">
+                                             <input className="form-check-input" type="radio" name="isPaid" id="isPaid" value="false" checked={!this.state.isPaid} onChange={this.handleChange} />
+                                             <label className="form-check-label" for="inlineRadio2">No</label>
+                                        </div>
+                                   </div>
+                              </div>
+                              <div className="form-group">
+                                   <label for="shipDate">Fecha de envio</label>
+                                   <input type="date" value={this.state.shipDate} className="form-control" id="shipDate" placeholder="Cantidad" onChange={this.handleChange} />
+                              </div>
+                              <div className="form-group">
+                                   <label for="isShipped">¿Esta enviado?</label>
+                                   <div className="isShipped">
+                                        <div className="form-check form-check-inline">
+                                             <input className="form-check-input" type="radio" name="isShipped" id="isShipped" value="true" checked={this.state.isShipped} onChange={this.handleChange} />
+                                             <label className="form-check-label" for="inlineRadio1">Si</label>
+                                        </div>
+                                        <div className="form-check form-check-inline">
+                                             <input className="form-check-input" type="radio" name="isShipped" id="isShipped" value="false" checked={!this.state.isShipped} onChange={this.handleChange} />
+                                             <label className="form-check-label" for="inlineRadio2">No</label>
+                                        </div>
+                                   </div>
+                              </div>
+                              <div className="form-group">
+                                   <label for="address">dirección</label>
+                                   <textarea className="form-control" value={this.state.address} id="address" rows="3" placeholder="Descripción" onChange={this.handleChange}></textarea>
+                              </div>
+
+                              <button type="submit" className="btn btn-primary">Enviar</button>
+                         </form>
+                    </div>
+               </React.Fragment>
           );
      }
 

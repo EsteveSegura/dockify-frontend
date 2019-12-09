@@ -4,6 +4,7 @@ import { withRouter } from 'react-router-dom';
 
 import ActionButton from '../../Components/actionButton/ActionButton';
 import CardSales from '../../Components/cardSales/CardSales'
+
 class Sales extends React.Component {
      constructor(props) {
           super(props);
@@ -48,8 +49,8 @@ class Sales extends React.Component {
                     </div>
                </div>
                <div className="row">
-                    {this.state.sales.map(sale => (
 
+                    {this.state.sales.map(sale => (
                          <CardSales 
                               saleId = {sale._id}
                               idClient = {sale.idClient}
