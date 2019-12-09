@@ -2,62 +2,122 @@ import React from 'react';
 import axios from 'axios';
 import { withRouter } from 'react-router-dom';
 
+//TODO
+//1 Poner bien la fecha
+//2 Poner los productos
+
 class FormEditProduct extends React.Component {
      constructor(props) {
           super(props);
 
           this.state = {
-               productId: '',
-               internalName: '',
-               publicName: '',
-               description: '',
-               quantity: '',
-               price: '',
-               productPicture: '',
-               productPictureFile: '',
-               dataIsEdited: false,
-               secureDelete: 0
+               idClient: '',
+               idClientShow: '',
+               isPaid: false,
+               isShipped: false,
+               discount: '0',
+               shipCost: '9',
+               productsCost: '0',
+               shipDate: '',
+               idProduct: [],
+               idProductShow: '',
+               address: '',
+               clients: [],
+               products: [],
+               suggestClient: [],
+               suggestProducts: [],
+               productsSelected: [],
+               clientSelected: 'Ningun cliente seleccionado'
           }
 
           this.handleChange = this.handleChange.bind(this);
           this.handleDelete = this.handleDelete.bind(this);
           this.handleSubmit = this.handleSubmit.bind(this);
+          this.getAllClients = this.getAllClients.bind(this)
+          this.getAllProducts = this.getAllProducts.bind(this)
+          this.filterAndFoundClient = this.filterAndFoundClient.bind(this)
+          this.setClientId = this.setClientId.bind(this)
+          this.setProducts = this.setProducts.bind(this)
+          this.removeProducts = this.removeProducts.bind(this)
+          this.setClientFromProps = this.setClientFromProps.bind(this)
+          this.getClient = this.getClient.bind(this)
+     }
+     
+
+     async componentWillReceiveProps(nextProps) {
+          console.log(nextProps.address)
+          this.setState({
+               idClient: nextProps.idClient ,
+               isPaid: nextProps.isPaid ,
+               isShipped: nextProps.isShipped ,
+               discount: nextProps.discount ,
+               shipCost: nextProps.shipCost ,
+               productsCost: nextProps.productsCost ,
+               shipDate: nextProps.shipDate ,
+               idProduct: nextProps.idProduct ,
+               address: nextProps.address ,
+               clientSelected : 's'
+          });
+          await this.getClient(nextProps.idClient)
+     }
+     
+     async getClient(clientId){
+          console.log(this.state)
+          let response = await axios.get(`http://localhost:3001/api/client/${clientId}`, {
+               headers: {
+                    "authorization": "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoicm9vdCIsImFkbWluIjp0cnVlLCJpYXQiOjE1NzUzMzQ0NTB9.sy10tqPv2n4VKGvUSw88iN3kglVY3wzm1vunXtEAC2Q"
+               }
+          })
+          this.setClientFromProps(response.data[0].name);
+          console.log(response.data[0])
      }
 
-     componentWillReceiveProps(nextProps) {
-          console.log(nextProps)
-          this.setState({
-               productId: this.props.productId,
-               internalName: nextProps.internalName,
-               publicName: nextProps.publicName,
-               description: nextProps.description,
-               quantity: nextProps.quantity,
-               price: nextProps.price,
-          });
-          console.log(this.props)
+     setClientFromProps(name){
+          console.log(name)
+          this.setState({clientSelected : name})
      }
 
      handleChange(event) {
           this.setState({ dataIsEdited: true })
           switch (event.target.id) {
-               case 'internalName':
-                    this.setState({ internalName: event.target.value })
+               case 'idClientShow':
+                    this.setState({ idClientShow: event.target.value });
+                    this.filterAndFoundClient();
                     break;
-               case 'publicName':
-                    this.setState({ publicName: event.target.value })
+               case 'idProductShow':
+                    this.setState({ idProductShow: event.target.value });
+                    this.filterAndFoundProduct();
                     break;
-               case 'description':
-                    this.setState({ description: event.target.value })
+               case 'shipCost':
+                    this.setState({ shipCost: event.target.value });
                     break;
-               case 'quantity':
-                    this.setState({ quantity: event.target.value })
+               case 'productsCost':
+                    this.setState({ productsCost: event.target.value });
                     break;
-               case 'price':
-                    this.setState({ price: event.target.value })
+               case 'shipDate':
+                    this.setState({ shipDate: event.target.value });
                     break;
-               case 'productPicture':
-                    this.setState({ productPicture: event.target.value })
+               case 'discount':
+                    this.setState({ discount: event.target.value });
                     break;
+               case 'address':
+                    this.setState({ address: event.target.value });
+                    break;
+               case 'isPaid':
+                    if (event.target.value == "true") {
+                         this.setState({ isPaid: true });
+                    } else {
+                         this.setState({ isPaid: false });
+                    }
+                    break;
+               case 'isShipped':
+                    if (event.target.value == "true") {
+                         this.setState({ isShipped: true });
+                    } else {
+                         this.setState({ isShipped: false });
+                    }
+                    break;
+
           }
           console.log(this.state)
      }
@@ -78,7 +138,7 @@ class FormEditProduct extends React.Component {
           console.log(this.state.secureDelete)
           this.setState({secureDelete : this.state.secureDelete+1})
           if(this.state.secureDelete >= 1){
-               axios.delete(`http://localhost:3001/api/product/${this.state.saleId}`, {
+               axios.delete(`http://localhost:3001/api/sale/${this.state.saleId}`, {
                     headers: {
                          "authorization": "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoicm9vdCIsImFkbWluIjp0cnVlLCJpYXQiOjE1NzUzMzQ0NTB9.sy10tqPv2n4VKGvUSw88iN3kglVY3wzm1vunXtEAC2Q"
                     }
@@ -89,34 +149,192 @@ class FormEditProduct extends React.Component {
           }
      }
 
+     getAllClients() {
+          axios.get('http://localhost:3001/api/clients/', {
+               headers: {
+                    "authorization": "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoicm9vdCIsImFkbWluIjp0cnVlLCJpYXQiOjE1NzUzMzQ0NTB9.sy10tqPv2n4VKGvUSw88iN3kglVY3wzm1vunXtEAC2Q"
+               }
+          }).then((response) => {
+               this.setState({
+                    clients: response.data
+               });
+          }, (error) => {
+               console.log(error)
+          });
+     }
+
+     getAllProducts() {
+          axios.get('http://localhost:3001/api/products/', {
+               headers: {
+                    "authorization": "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoicm9vdCIsImFkbWluIjp0cnVlLCJpYXQiOjE1NzUzMzQ0NTB9.sy10tqPv2n4VKGvUSw88iN3kglVY3wzm1vunXtEAC2Q"
+               }
+          }).then((response) => {
+               this.setState({
+                    products: response.data
+               });
+          }, (error) => {
+               console.log(error)
+          });
+     }
+
+     filterAndFoundClient() {
+          if (this.state.idClientShow != '') {
+               let suggestions = this.state.clients.filter((found) => {
+                    let nameToLowerCase = found.name.toLowerCase()
+                    if (nameToLowerCase.startsWith(this.state.idClientShow)) {
+                         return found
+                    }
+               })
+               this.setState({ suggestClient: suggestions })
+          }
+     }
+
+     filterAndFoundProduct() {
+          if (this.state.idProductShow != '') {
+               let suggestions = this.state.products.filter((found) => {
+                    let nameToLowerCase = found.internalName.toLowerCase()
+                    if (nameToLowerCase.startsWith(this.state.idProductShow)) {
+                         return found
+                    }
+               })
+               this.setState({ suggestProducts: suggestions })
+          }
+     }
+
+     setClientId(event) {
+          let selectedClient = this.state.suggestClient.filter((sugest) => {
+               if (sugest._id == event.target.id) {
+                    return sugest
+               }
+          })
+
+          this.setState({ idClient: event.target.id, idClientShow: '', suggestClient: [], clientSelected: event.target.innerHTML, address: selectedClient[0].address })
+     }
+
+     setProducts(event) {
+          let selectedProduct = this.state.suggestProducts.filter((sugest) => {
+               if (sugest._id == event.target.id) {
+                    return sugest
+               }
+          })
+          let actualId = { id: event.target.id, name: event.target.innerHTML }
+          this.setState(prevState => ({
+               productsSelected: [...prevState.productsSelected, actualId],
+               idProduct: [...prevState.idProduct, actualId.id],
+               productsCost: parseInt(prevState.productsCost) + parseInt(selectedProduct[0].price),
+               idProductShow: '',
+               suggestProducts: []
+          }))
+     }
+
+     removeProducts(event) {
+          event.preventDefault()
+          this.setState({ productsSelected: [] })
+     }
+
+     componentDidMount(){
+          this.getAllClients()
+          this.getAllProducts()
+     }
+
      render() {
           return (
-               <div className="from-field col-xl-12 col-lg-12 col-md-12 col-sm-12">
-                    <form onSubmit={this.handleSubmit}>
-                         <div className="form-group">
-                              <label for="internalName">Nombre interno</label>
-                              <input type="text" value={this.state.internalName} className="form-control" id="internalName" placeholder="Nombre" onChange={this.handleChange} />
-                         </div>
-                         <div className="form-group">
-                              <label for="publicName">Nombre Publico</label>
-                              <input type="text" value={this.state.publicName} className="form-control" id="publicName" placeholder="Nombre" onChange={this.handleChange} />
-                         </div>
-                         <div className="form-group">
-                              <label for="quantity">Cantidad</label>
-                              <input type="text" value={this.state.quantity} className="form-control" id="quantity" placeholder="Nombre" onChange={this.handleChange} />
-                         </div>
-                         <div className="form-group">
-                              <label for="price">Precio</label>
-                              <input type="text" value={this.state.price} className="form-control" id="price" placeholder="Nombre" onChange={this.handleChange} />
-                         </div>
-                         <div className="form-group">
-                              <label for="description">Descripción</label>
-                              <textarea className="form-control" value={this.state.description} id="description" rows="3" placeholder="Descripción" onChange={this.handleChange}></textarea>
-                         </div>
-                         <button type="submit" className="btn space-btn btn-primary">Editar</button>
-                         <button type="button" onClick={this.handleDelete} className="btn btn-danger">Eliminar</button>
-                    </form>
-               </div>
+               <React.Fragment>
+                    <div className="from-field mr-4 col-xl-3 col-lg-12 col-md-12 col-sm-12">
+                         <form>
+                              <div className="form-group">
+                                   <label for="idClientShow">Buscar Cliente</label>
+                                   <input type="text" autoComplete="off" value={this.state.idClientShow} className="form-control" id="idClientShow" placeholder="Nombre interno" onChange={this.handleChange} />
+
+                              </div>
+                              <div className="mt-3 mb-3">
+                                   {this.state.suggestClient.map(sugest => {
+                                        return (<div className="badge-search" id={sugest._id} onClick={this.setClientId}>
+                                             {sugest.name}
+                                        </div>)
+                                   })}
+                              </div>
+                              <div>
+                              </div>
+                              <div className="form-group">
+                                   <label for="idProductShow">Buscar Productos</label>
+                                   <input type="text" autoComplete="off" value={this.state.idProductShow} className="form-control" id="idProductShow" placeholder="Producto" onChange={this.handleChange} />
+                              </div>
+                              {this.state.suggestProducts.map(sugest => {
+                                   return (<div id={sugest._id} className="badge-search mb-2" onClick={this.setProducts}>
+                                        {sugest.internalName}
+                                   </div>)
+                              })}
+                              <div className="mt-3">
+                                   <button className="btn btn-primary " onClick={this.removeProducts}>Remove Products</button>
+                              </div>
+
+                         </form>
+                    </div>
+                    <div className="from-field col-xl-8 col-lg-12 col-md-12 col-sm-12">
+
+                         <form onSubmit={this.handleSubmit}>
+                              <div className="form-group">
+                                   <label for="shipCost">Cliente</label>
+                                   <input type="text" value={this.state.clientSelected} className="form-control" id="shipCost" placeholder="Cantidad" onChange={this.handleChange} disabled />
+                              </div>
+                              <div className="form-group">
+                                   <div className="txt-input">Productos seleccionados</div>
+                                   {this.state.productsSelected.map((product) => {
+                                        return <div className="badge-search">{product.name}</div>
+                                   })}
+                              </div>
+                              <div className="form-group">
+                                   <label for="shipCost">Coste Envio</label>
+                                   <input type="number" value={this.state.shipCost} className="form-control" id="shipCost" placeholder="Cantidad" onChange={this.handleChange} />
+                              </div>
+                              <div className="form-group">
+                                   <label for="productsCost">Coste Pedido</label>
+                                   <input type="number" value={this.state.productsCost} className="form-control" id="productsCost" placeholder="Cantidad" onChange={this.handleChange} />
+                              </div>
+                              <div className="form-group">
+                                   <label for="discount">Descuento</label>
+                                   <input type="number" value={this.state.discount} className="form-control" id="discount" placeholder="Cantidad" onChange={this.handleChange} />
+                              </div>
+                              <div className="form-group">
+                                   <label for="isPaid">¿Esta pagado?</label>
+                                   <div className="isPaid">
+                                        <div className="form-check form-check-inline">
+                                             <input className="form-check-input" type="radio" name="isPaid" id="isPaid" value="true" checked={this.state.isPaid} onChange={this.handleChange} />
+                                             <label className="form-check-label" for="inlineRadio1">Si</label>
+                                        </div>
+                                        <div className="form-check form-check-inline">
+                                             <input className="form-check-input" type="radio" name="isPaid" id="isPaid" value="false" checked={!this.state.isPaid} onChange={this.handleChange} />
+                                             <label className="form-check-label" for="inlineRadio2">No</label>
+                                        </div>
+                                   </div>
+                              </div>
+                              <div className="form-group">
+                                   <label for="shipDate">Fecha de envio</label>
+                                   <input type="date" value={this.state.shipDate} className="form-control" id="shipDate" placeholder="Cantidad" onChange={this.handleChange} />
+                              </div>
+                              <div className="form-group">
+                                   <label for="isShipped">¿Esta enviado?</label>
+                                   <div className="isShipped">
+                                        <div className="form-check form-check-inline">
+                                             <input className="form-check-input" type="radio" name="isShipped" id="isShipped" value="true" checked={this.state.isShipped} onChange={this.handleChange} />
+                                             <label className="form-check-label" for="inlineRadio1">Si</label>
+                                        </div>
+                                        <div className="form-check form-check-inline">
+                                             <input className="form-check-input" type="radio" name="isShipped" id="isShipped" value="false" checked={!this.state.isShipped} onChange={this.handleChange} />
+                                             <label className="form-check-label" for="inlineRadio2">No</label>
+                                        </div>
+                                   </div>
+                              </div>
+                              <div className="form-group">
+                                   <label for="address">dirección</label>
+                                   <textarea className="form-control" value={this.state.address} id="address" rows="3" placeholder="Descripción" onChange={this.handleChange}></textarea>
+                              </div>
+
+                              <button type="submit" className="btn btn-primary">Enviar</button>
+                         </form>
+                    </div>
+               </React.Fragment>
           );
      }
 }

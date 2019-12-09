@@ -26,7 +26,6 @@ class EditProduct extends React.Component {
                     "authorization": "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoicm9vdCIsImFkbWluIjp0cnVlLCJpYXQiOjE1NzUzMzQ0NTB9.sy10tqPv2n4VKGvUSw88iN3kglVY3wzm1vunXtEAC2Q"
                }
           });
-          console.log(this.state.price)
           return response.data[0]
      }
 

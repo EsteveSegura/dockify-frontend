@@ -13,7 +13,7 @@ class FormEditClient extends React.Component {
                country: '',
                address: '',
                dataIsEdited: false,
-               secureDelete : 0
+               secureDelete: 0
           }
 
           this.handleChange = this.handleChange.bind(this);
@@ -60,18 +60,18 @@ class FormEditClient extends React.Component {
           }
           this.props.history.push("/");
      }
-     
+
      handleDelete() {
           console.log(this.state.secureDelete)
-          this.setState({secureDelete : this.state.secureDelete+1})
-          if(this.state.secureDelete >= 1){
+          this.setState({ secureDelete: this.state.secureDelete + 1 })
+          if (this.state.secureDelete >= 1) {
                axios.delete(`http://localhost:3001/api/client/${this.props.clientId}`, {
                     headers: {
                          "authorization": "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoicm9vdCIsImFkbWluIjp0cnVlLCJpYXQiOjE1NzUzMzQ0NTB9.sy10tqPv2n4VKGvUSw88iN3kglVY3wzm1vunXtEAC2Q"
                     }
                })
                this.props.history.push("/");
-          }else{
+          } else {
                alert('To delete this element click one more time. Secure mesure')
           }
      }
@@ -96,7 +96,7 @@ class FormEditClient extends React.Component {
                               <label for="address">Example textarea</label>
                               <textarea className="form-control" id="address" rows="3" placeholder="Dirección" value={this.state.address} onChange={this.handleChange}></textarea>
                          </div>
-                         <button type="submit" className="btn space-btn btn-primary">Editar</button>  
+                         <button type="submit" className="btn space-btn btn-primary">Editar</button>
                          <button type="button" onClick={this.handleDelete} className="btn btn-danger">Eliminar</button>
                     </form>
                </div>

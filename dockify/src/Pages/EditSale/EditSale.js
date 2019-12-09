@@ -22,14 +22,12 @@ class EditProduct extends React.Component {
                console.log(this.state)
           }, 1000);
      }
-
      async getData() {
-          let response =  await axios.get(`http://localhost:3001/api/sale/${this.props.match.params.saleId}`, {
+          let response = await axios.get(`http://localhost:3001/api/sale/${this.props.match.params.saleId}`, {
                headers: {
                     "authorization": "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoicm9vdCIsImFkbWluIjp0cnVlLCJpYXQiOjE1NzUzMzQ0NTB9.sy10tqPv2n4VKGvUSw88iN3kglVY3wzm1vunXtEAC2Q"
                }
           });
-          console.log(response.data[0])
           return response.data[0]
      }
 
@@ -37,7 +35,19 @@ class EditProduct extends React.Component {
           return (
                <div className="container">
                     <div className="row">
-                         <FormEditSale />
+                         <p>sad</p>
+                         <FormEditSale
+                              idSale = {this.props.match.params.saleId}
+                              idClient = {this.state.sale.idClient}
+                              isPaid = {this.state.sale.isPaid}
+                              isShipped = {this.state.sale.isShipped}
+                              discount = {this.state.sale.discount}
+                              shipCost = {this.state.sale.shipCost}
+                              productsCost = {this.state.sale.productsCost}
+                              shipDate = {this.state.sale.shipDate}
+                              idProduct = {this.state.sale.idProduct}
+                              address = {this.state.sale.address}
+                         />
                     </div>
                </div>
           );
