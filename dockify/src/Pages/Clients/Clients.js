@@ -1,17 +1,19 @@
 import React from 'react';
-import Bootstrap from '../CommonFiles/style.css';
-import Style from '../CommonFiles/bootstrap.min.css';
 import axios from 'axios';
-
 import ActionButton from '../../Components/actionButton/ActionButton';
 import Card from '../../Components/cardClient/CardClient'
 import { withRouter } from 'react-router-dom';
+
+import bootstrap from '../CommonFiles/bootstrap.min.css'
+import style from '../CommonFiles/style.css'
+
+import jsCookie from 'js-cookie';
 
 class Clients extends React.Component {
      constructor(props) {
           super(props);
           this.state = {
-               clients: []
+               clients: [],
           };
 
           this.goAddClient = this.goAddClient.bind(this)
@@ -21,10 +23,21 @@ class Clients extends React.Component {
           this.props.history.push("/add/client");
      }
 
-     componentDidMount() {
-          axios.get('http://localhost:3001/api/clients/', {
+     async componentWillMount() {
+          if (jsCookie.get('token')) {
+               this.setState({ token: 'bearer ' + jsCookie.get('token') })
+               console.log(jsCookie.get('token'))
+          } else {
+               console.log('sad')
+               this.setState({ token: null })
+          }
+     }
+     
+     async componentDidMount(){
+          console.log(this.state.token)
+          await axios.get('http://localhost:3001/api/clients/', {
                headers: {
-                    "authorization": "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoicm9vdCIsImFkbWluIjp0cnVlLCJpYXQiOjE1NzUzMzQ0NTB9.sy10tqPv2n4VKGvUSw88iN3kglVY3wzm1vunXtEAC2Q"
+                    "authorization": this.state.token
                }
           }).then((response) => {
                this.setState({

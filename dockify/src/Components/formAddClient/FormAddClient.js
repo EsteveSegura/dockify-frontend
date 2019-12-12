@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import jsCookie from 'js-cookie';
 import { withRouter } from "react-router-dom";
 
 class FormAddClient extends React.Component {
@@ -18,6 +19,13 @@ class FormAddClient extends React.Component {
 
      }
 
+     async componentWillMount() {
+          if (jsCookie.get('token')) {
+               this.setState({ token: 'bearer ' + jsCookie.get('token') })
+          } else {
+               this.setState({ token: null })
+          }
+     }
 
 
      handleChange(event) {
@@ -41,7 +49,7 @@ class FormAddClient extends React.Component {
      handleSubmit(event) {
           axios.post('http://localhost:3001/api/client/', this.state ,{ 
                headers: {
-                    "authorization": "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoicm9vdCIsImFkbWluIjp0cnVlLCJpYXQiOjE1NzUzMzQ0NTB9.sy10tqPv2n4VKGvUSw88iN3kglVY3wzm1vunXtEAC2Q"
+                    "authorization": this.state.token
                }
           }).then(function (response) {
                     console.log(response);

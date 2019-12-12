@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import jsCookie from 'js-cookie';
 import { withRouter } from 'react-router-dom';
 
 //TODO
@@ -13,6 +14,7 @@ class FormEditProduct extends React.Component {
           this.state = {
                idClient: '',
                idClientShow: '',
+               secureDelete : 0,
                isPaid: false,
                isShipped: false,
                discount: '0',
@@ -39,43 +41,64 @@ class FormEditProduct extends React.Component {
           this.setClientId = this.setClientId.bind(this)
           this.setProducts = this.setProducts.bind(this)
           this.removeProducts = this.removeProducts.bind(this)
-          this.setClientFromProps = this.setClientFromProps.bind(this)
           this.getClient = this.getClient.bind(this)
+          this.getProducts = this.getProducts.bind(this)
      }
-     
+
+     async componentWillMount() {
+          if (jsCookie.get('token')) {
+               this.setState({ token: 'bearer ' + jsCookie.get('token') })
+          } else {
+               this.setState({ token: null })
+          }
+     }
+
 
      async componentWillReceiveProps(nextProps) {
+          let formatDate = nextProps.shipDate.split('T')[0]
           console.log(nextProps.address)
           this.setState({
-               idClient: nextProps.idClient ,
-               isPaid: nextProps.isPaid ,
-               isShipped: nextProps.isShipped ,
-               discount: nextProps.discount ,
-               shipCost: nextProps.shipCost ,
-               productsCost: nextProps.productsCost ,
-               shipDate: nextProps.shipDate ,
-               idProduct: nextProps.idProduct ,
-               address: nextProps.address ,
-               clientSelected : 's'
+               idClient: nextProps.idClient,
+               isPaid: nextProps.isPaid,
+               isShipped: nextProps.isShipped,
+               discount: nextProps.discount,
+               shipCost: nextProps.shipCost,
+               productsCost: nextProps.productsCost,
+               shipDate: formatDate,
+               idProduct: nextProps.idProduct,
+               address: nextProps.address,
+               clientSelected: 's'
           });
           await this.getClient(nextProps.idClient)
+          await this.getProducts(nextProps.idProduct)
      }
-     
-     async getClient(clientId){
+
+     async getProducts(products) {
+          products.map(async(productId) => {
+               let response = await axios.get(`http://localhost:3001/api/product/${productId}`, {
+                    headers: {
+                         "authorization": this.state.token
+                    }
+               })
+               let actualId = { id: response.data[0]._id, name: response.data[0].internalName }
+               this.setState(prevState => ({
+                    productsSelected: [...prevState.productsSelected, actualId],
+               }))
+               console.log(response.data[0])
+          })
+     }
+
+     async getClient(clientId) {
           console.log(this.state)
           let response = await axios.get(`http://localhost:3001/api/client/${clientId}`, {
                headers: {
-                    "authorization": "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoicm9vdCIsImFkbWluIjp0cnVlLCJpYXQiOjE1NzUzMzQ0NTB9.sy10tqPv2n4VKGvUSw88iN3kglVY3wzm1vunXtEAC2Q"
+                    "authorization": this.state.token
                }
           })
-          this.setClientFromProps(response.data[0].name);
           console.log(response.data[0])
+          this.setState({ clientSelected: response.data[0].name })
      }
 
-     setClientFromProps(name){
-          console.log(name)
-          this.setState({clientSelected : name})
-     }
 
      handleChange(event) {
           this.setState({ dataIsEdited: true })
@@ -124,10 +147,11 @@ class FormEditProduct extends React.Component {
 
      handleSubmit(event) {
           event.preventDefault();
-          if(this.state.dataIsEdited) {
-               axios.put(`http://localhost:3001/api/sale/${this.props.saleId}`, this.state, {
+          alert(this.props.saleId)
+          if (this.state.dataIsEdited) {
+               axios.put(`http://localhost:3001/api/sale/${this.props.idSale}`, this.state, {
                     headers: {
-                         "authorization": "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoicm9vdCIsImFkbWluIjp0cnVlLCJpYXQiOjE1NzUzMzQ0NTB9.sy10tqPv2n4VKGvUSw88iN3kglVY3wzm1vunXtEAC2Q"
+                         "authorization": this.state.token
                     }
                })
           }
@@ -135,16 +159,17 @@ class FormEditProduct extends React.Component {
      }
 
      handleDelete() {
+
           console.log(this.state.secureDelete)
-          this.setState({secureDelete : this.state.secureDelete+1})
-          if(this.state.secureDelete >= 1){
-               axios.delete(`http://localhost:3001/api/sale/${this.state.saleId}`, {
+          this.setState({ secureDelete: this.state.secureDelete + 1 })
+          if (this.state.secureDelete >= 1) {
+               axios.delete(`http://localhost:3001/api/sale/${this.props.idSale}`, {
                     headers: {
-                         "authorization": "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoicm9vdCIsImFkbWluIjp0cnVlLCJpYXQiOjE1NzUzMzQ0NTB9.sy10tqPv2n4VKGvUSw88iN3kglVY3wzm1vunXtEAC2Q"
+                         "authorization": this.state.token
                     }
                })
                this.props.history.push("/");
-          }else{
+          } else {
                alert('To delete this element click one more time. Secure mesure')
           }
      }
@@ -152,7 +177,7 @@ class FormEditProduct extends React.Component {
      getAllClients() {
           axios.get('http://localhost:3001/api/clients/', {
                headers: {
-                    "authorization": "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoicm9vdCIsImFkbWluIjp0cnVlLCJpYXQiOjE1NzUzMzQ0NTB9.sy10tqPv2n4VKGvUSw88iN3kglVY3wzm1vunXtEAC2Q"
+                    "authorization": this.state.token
                }
           }).then((response) => {
                this.setState({
@@ -166,7 +191,7 @@ class FormEditProduct extends React.Component {
      getAllProducts() {
           axios.get('http://localhost:3001/api/products/', {
                headers: {
-                    "authorization": "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoicm9vdCIsImFkbWluIjp0cnVlLCJpYXQiOjE1NzUzMzQ0NTB9.sy10tqPv2n4VKGvUSw88iN3kglVY3wzm1vunXtEAC2Q"
+                    "authorization": this.state.token
                }
           }).then((response) => {
                this.setState({
@@ -229,10 +254,10 @@ class FormEditProduct extends React.Component {
 
      removeProducts(event) {
           event.preventDefault()
-          this.setState({ productsSelected: [] })
+          this.setState({ productsSelected: [], productsCost:'0',idProduct:[] })
      }
 
-     componentDidMount(){
+     componentDidMount() {
           this.getAllClients()
           this.getAllProducts()
      }
@@ -331,7 +356,8 @@ class FormEditProduct extends React.Component {
                                    <textarea className="form-control" value={this.state.address} id="address" rows="3" placeholder="Descripción" onChange={this.handleChange}></textarea>
                               </div>
 
-                              <button type="submit" className="btn btn-primary">Enviar</button>
+                              <button type="submit" className="btn space-btn btn-primary">Enviar</button>
+                              <button type="button" onClick={this.handleDelete} className="btn btn-danger">Eliminar</button>
                          </form>
                     </div>
                </React.Fragment>

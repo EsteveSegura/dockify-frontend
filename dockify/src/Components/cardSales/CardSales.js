@@ -3,6 +3,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import Slider from '../../Components/Slider/Slider';
 import axios from 'axios';
+import jsCookie from 'js-cookie';
 
 class CardSales extends React.Component {
      constructor(props) {
@@ -19,12 +20,22 @@ class CardSales extends React.Component {
           this.formatDate = this.formatDate.bind(this);
      }
 
+     async componentWillMount() {
+          if (jsCookie.get('token')) {
+               this.setState({ token: 'bearer ' + jsCookie.get('token') })
+               console.log(jsCookie.get('token'))
+          } else {
+               this.setState({ token: null })
+          }
+     }
+
      async getInfoClient() {
           await axios.get(`http://localhost:3001/api/client/${this.props.idClient}`, {
                headers: {
-                    "authorization": "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoicm9vdCIsImFkbWluIjp0cnVlLCJpYXQiOjE1NzUzMzQ0NTB9.sy10tqPv2n4VKGvUSw88iN3kglVY3wzm1vunXtEAC2Q"
+                    "authorization": this.state.token
                }
           }).then((response) => {
+               console.log(response)
                this.setState({
                     client: response.data[0]
                });
@@ -37,7 +48,7 @@ class CardSales extends React.Component {
           this.props.idProduct.map(async (product) => {
                await axios.get(`http://localhost:3001/api/product/${product}`, {
                     headers: {
-                         "authorization": "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoicm9vdCIsImFkbWluIjp0cnVlLCJpYXQiOjE1NzUzMzQ0NTB9.sy10tqPv2n4VKGvUSw88iN3kglVY3wzm1vunXtEAC2Q"
+                         "authorization": this.state.token
                     }
                }).then((response) => {
                     this.setState(prevState => ({
@@ -120,22 +131,3 @@ class CardSales extends React.Component {
 }
 
 export default CardSales;
-
-/*
-
-                                   {this.displayProducts().pictures.map((picturePath) => {
-                                        return <img src={'http://localhost:3001/' + picturePath} width={50} alt="..." />
-                                   })}
-
-<img src={'http://localhost:3001/'+this.props.picturePath} class="card-img-top" alt="..." />
-
-address : String,
-idClient : String,*
-shipCost : Number,*
-productsCost : Number,*
-isShipped : {type: Boolean, default: false},*
-discount : {type : Number, default: 0},*
-isPaid : {type: Boolean, default: false},*
-idProduct : [String],*
-shipDate : {type: Date, default: Date.now()},
-*/

@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import jsCookie from 'js-cookie';
 
 import FormEditProduct from '../../Components/formEditProduct/FormEditProduct';
 
@@ -12,8 +13,16 @@ class EditProduct extends React.Component {
 
           this.getData = this.getData.bind(this);
      }
-
+     
      async componentWillMount() {
+          if (jsCookie.get('token')) {
+               this.setState({ token: 'bearer ' + jsCookie.get('token') })
+          } else {
+               this.setState({ token: null })
+          }
+     }
+
+     async componentDidMount(){
           let data = await this.getData()
           this.setState({
                product: data
@@ -21,9 +30,10 @@ class EditProduct extends React.Component {
      }
 
      async getData() {
-          let response = await await axios.get(`http://localhost:3001/api/product/${this.props.match.params.productId}`, {
+          console.log(this.state.token)
+          let response =  await axios.get(`http://localhost:3001/api/product/${this.props.match.params.productId}`, {
                headers: {
-                    "authorization": "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoicm9vdCIsImFkbWluIjp0cnVlLCJpYXQiOjE1NzUzMzQ0NTB9.sy10tqPv2n4VKGvUSw88iN3kglVY3wzm1vunXtEAC2Q"
+                    "authorization": this.state.token
                }
           });
           return response.data[0]

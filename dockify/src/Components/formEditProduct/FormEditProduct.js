@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import jsCookie from 'js-cookie';
 import { withRouter } from 'react-router-dom';
 
 class FormEditProduct extends React.Component {
@@ -62,12 +63,20 @@ class FormEditProduct extends React.Component {
           console.log(this.state)
      }
 
+     async componentWillMount() {
+          if (jsCookie.get('token')) {
+               this.setState({ token: 'bearer ' + jsCookie.get('token') })
+          } else {
+               this.setState({ token: null })
+          }
+     }
+
      handleSubmit(event) {
           event.preventDefault();
           if(this.state.dataIsEdited) {
                axios.put(`http://localhost:3001/api/product/${this.props.productId}`, this.state, {
                     headers: {
-                         "authorization": "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoicm9vdCIsImFkbWluIjp0cnVlLCJpYXQiOjE1NzUzMzQ0NTB9.sy10tqPv2n4VKGvUSw88iN3kglVY3wzm1vunXtEAC2Q"
+                         "authorization": this.state.token
                     }
                })
           }
@@ -80,7 +89,7 @@ class FormEditProduct extends React.Component {
           if(this.state.secureDelete >= 1){
                axios.delete(`http://localhost:3001/api/product/${this.state.productId}`, {
                     headers: {
-                         "authorization": "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoicm9vdCIsImFkbWluIjp0cnVlLCJpYXQiOjE1NzUzMzQ0NTB9.sy10tqPv2n4VKGvUSw88iN3kglVY3wzm1vunXtEAC2Q"
+                         "authorization": this.state.token
                     }
                })
                this.props.history.push("/");

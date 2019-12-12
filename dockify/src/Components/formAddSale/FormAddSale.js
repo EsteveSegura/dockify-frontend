@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import jsCookie from 'js-cookie';
 import { withRouter } from "react-router-dom";
 
 class FormAddProducts extends React.Component {
@@ -84,7 +85,7 @@ class FormAddProducts extends React.Component {
      handleSubmit(event) {
           axios.post('http://localhost:3001/api/sale/', this.state, {
                headers: {
-                    "authorization": "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoicm9vdCIsImFkbWluIjp0cnVlLCJpYXQiOjE1NzUzMzQ0NTB9.sy10tqPv2n4VKGvUSw88iN3kglVY3wzm1vunXtEAC2Q"
+                    "authorization": this.state.token
                }
           }).then(function (response) {
                console.log(response);
@@ -101,11 +102,19 @@ class FormAddProducts extends React.Component {
           this.getAllClients()
           this.getAllProducts()
      }
+     
+     async componentWillMount() {
+          if (jsCookie.get('token')) {
+               this.setState({ token: 'bearer ' + jsCookie.get('token') })
+          } else {
+               this.setState({ token: null })
+          }
+     }
 
      getAllClients() {
           axios.get('http://localhost:3001/api/clients/', {
                headers: {
-                    "authorization": "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoicm9vdCIsImFkbWluIjp0cnVlLCJpYXQiOjE1NzUzMzQ0NTB9.sy10tqPv2n4VKGvUSw88iN3kglVY3wzm1vunXtEAC2Q"
+                    "authorization": this.state.token
                }
           }).then((response) => {
                this.setState({
@@ -119,7 +128,7 @@ class FormAddProducts extends React.Component {
      getAllProducts() {
           axios.get('http://localhost:3001/api/products/', {
                headers: {
-                    "authorization": "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoicm9vdCIsImFkbWluIjp0cnVlLCJpYXQiOjE1NzUzMzQ0NTB9.sy10tqPv2n4VKGvUSw88iN3kglVY3wzm1vunXtEAC2Q"
+                    "authorization": this.state.token
                }
           }).then((response) => {
                this.setState({
@@ -182,7 +191,7 @@ class FormAddProducts extends React.Component {
 
      removeProducts(event) {
           event.preventDefault()
-          this.setState({ productsSelected: [] })
+          this.setState({ productsSelected: [], productsCost:'0',idProduct:[] })
      }
 
      render() {
