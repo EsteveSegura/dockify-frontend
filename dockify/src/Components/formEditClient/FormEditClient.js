@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import jsCookie from 'js-cookie';
 import { withRouter } from "react-router-dom";
+import config from '../../config';
 
 class FormEditClient extends React.Component {
      constructor(props) {
@@ -61,7 +62,7 @@ class FormEditClient extends React.Component {
      handleSubmit(event) {
           event.preventDefault();
           if (this.state.dataIsEdited) {
-               axios.put(`http://localhost:3001/api/client/${this.props.clientId}`, this.state, {
+               axios.put(`${config.HOST}api/client/${this.props.clientId}`, this.state, {
                     headers: {
                          "authorization": this.state.token
                     }
@@ -74,7 +75,7 @@ class FormEditClient extends React.Component {
           console.log(this.state.secureDelete)
           this.setState({ secureDelete: this.state.secureDelete + 1 })
           if (this.state.secureDelete >= 1) {
-               axios.delete(`http://localhost:3001/api/client/${this.props.clientId}`, {
+               axios.delete(`${config.HOST}api/client/${this.props.clientId}`, {
                     headers: {
                          "authorization": this.state.token
                     }

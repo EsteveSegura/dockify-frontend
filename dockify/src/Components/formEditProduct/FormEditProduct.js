@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import jsCookie from 'js-cookie';
 import { withRouter } from 'react-router-dom';
+import config from '../../config';
 
 class FormEditProduct extends React.Component {
      constructor(props) {
@@ -74,7 +75,7 @@ class FormEditProduct extends React.Component {
      handleSubmit(event) {
           event.preventDefault();
           if(this.state.dataIsEdited) {
-               axios.put(`http://localhost:3001/api/product/${this.props.productId}`, this.state, {
+               axios.put(`${config.HOST}api/product/${this.props.productId}`, this.state, {
                     headers: {
                          "authorization": this.state.token
                     }
@@ -87,7 +88,7 @@ class FormEditProduct extends React.Component {
           console.log(this.state.secureDelete)
           this.setState({secureDelete : this.state.secureDelete+1})
           if(this.state.secureDelete >= 1){
-               axios.delete(`http://localhost:3001/api/product/${this.state.productId}`, {
+               axios.delete(`${config.HOST}api/product/${this.state.productId}`, {
                     headers: {
                          "authorization": this.state.token
                     }

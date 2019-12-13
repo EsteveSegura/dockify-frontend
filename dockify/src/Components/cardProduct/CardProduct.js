@@ -1,13 +1,14 @@
 import React from 'react';
 
 import { Link } from "react-router-dom";
+import config from '../../config';
 
 class CardProduct extends React.Component {
      render() {
           return (
                <div className="col-xl-3 col-lg-4 col-md-6 col-sm-12">
                     <div className="card card-client" >
-                         <img src={'http://localhost:3001/'+this.props.picturePath} class="card-img-top" alt="..." />
+                         <img src={config.HOST+this.props.picturePath} class="card-img-top" alt="..." />
                          <div className="card-body">
                               <h5 className="card-title"><strong>{this.props.publicName}</strong></h5>
                               <ul className="text-left card-list">

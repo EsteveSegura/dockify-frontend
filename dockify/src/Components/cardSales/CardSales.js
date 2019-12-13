@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import Slider from '../../Components/Slider/Slider';
 import axios from 'axios';
 import jsCookie from 'js-cookie';
+import config from '../../config';
 
 class CardSales extends React.Component {
      constructor(props) {
@@ -30,7 +31,7 @@ class CardSales extends React.Component {
      }
 
      async getInfoClient() {
-          await axios.get(`http://localhost:3001/api/client/${this.props.idClient}`, {
+          await axios.get(`${config.HOST}api/client/${this.props.idClient}`, {
                headers: {
                     "authorization": this.state.token
                }
@@ -46,7 +47,7 @@ class CardSales extends React.Component {
 
      async getInfoProducts() {
           this.props.idProduct.map(async (product) => {
-               await axios.get(`http://localhost:3001/api/product/${product}`, {
+               await axios.get(`${config.HOST}api/product/${product}`, {
                     headers: {
                          "authorization": this.state.token
                     }

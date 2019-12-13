@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import jsCookie from 'js-cookie';
 import { withRouter } from "react-router-dom";
+import config from '../../config';
 
 
 class Login extends React.Component {
@@ -29,7 +30,7 @@ class Login extends React.Component {
 
      async handleSubmit(event) {
           event.preventDefault();
-          let response = await axios.post('http://localhost:3001/api/login/', {
+          let response = await axios.post(config.HOST+'api/login/', {
                user: this.state.user,
                password: this.state.password
           })

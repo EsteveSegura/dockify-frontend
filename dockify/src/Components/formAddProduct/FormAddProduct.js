@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import jsCookie from 'js-cookie';
 import { withRouter } from "react-router-dom";
+import config from '../../config';
 
 class FormAddProducts extends React.Component {
      constructor(props) {
@@ -62,7 +63,7 @@ class FormAddProducts extends React.Component {
           fd.append('description', this.state.description)
           fd.append('quantity', this.state.quantity)
           fd.append('price', this.state.price)
-          axios.post('http://localhost:3001/api/product/', fd, {
+          axios.post(config.HOST + 'api/product/', fd, {
                headers: {
                     "authorization": this.state.token
                }

@@ -8,6 +8,7 @@ import bootstrap from '../CommonFiles/bootstrap.min.css'
 import style from '../CommonFiles/style.css'
 
 import jsCookie from 'js-cookie';
+import config from '../../config';
 
 class Clients extends React.Component {
      constructor(props) {
@@ -35,7 +36,7 @@ class Clients extends React.Component {
      
      async componentDidMount(){
           console.log(this.state.token)
-          await axios.get('http://localhost:3001/api/clients/', {
+          await axios.get(config.HOST +'api/clients/', {
                headers: {
                     "authorization": this.state.token
                }

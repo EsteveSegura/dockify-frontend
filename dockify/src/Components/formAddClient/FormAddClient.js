@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import jsCookie from 'js-cookie';
 import { withRouter } from "react-router-dom";
+import config from '../../config';
 
 class FormAddClient extends React.Component {
      constructor(props) {
@@ -47,7 +48,7 @@ class FormAddClient extends React.Component {
      }
 
      handleSubmit(event) {
-          axios.post('http://localhost:3001/api/client/', this.state ,{ 
+          axios.post(config.HOST + 'api/client/', this.state ,{ 
                headers: {
                     "authorization": this.state.token
                }

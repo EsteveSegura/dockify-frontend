@@ -5,6 +5,8 @@ import { withRouter } from 'react-router-dom';
 import ActionButton from '../../Components/actionButton/ActionButton';
 import CardSales from '../../Components/cardSales/CardSales'
 
+import config from '../../config';
+
 import jsCookie from 'js-cookie';
 
 class Sales extends React.Component {
@@ -33,7 +35,7 @@ class Sales extends React.Component {
      }
 
      componentDidMount() {
-          axios.get('http://localhost:3001/api/sales/', {
+          axios.get(config.HOST + 'api/sales/', {
                headers: {
                     "authorization": this.state.token
                }

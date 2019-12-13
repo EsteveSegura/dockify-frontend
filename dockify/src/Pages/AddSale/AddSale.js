@@ -1,6 +1,7 @@
 import React from 'react';
 
-import FormAddSale from '../../Components/formAddSale/FormAddSale'
+import FormAddSale from '../../Components/formAddSale/FormAddSale';
+
 
 class AddSale extends React.Component{
      constructor(props){

@@ -3,6 +3,7 @@ import axios from 'axios';
 import jsCookie from 'js-cookie';
 
 import FormEditClient from '../../Components/formEditClient/FormEditClient';
+import config from '../../config';
 
 class EditClient extends React.Component {
      constructor(props) {
@@ -32,7 +33,7 @@ class EditClient extends React.Component {
      }
 
      async getData() {
-          let response = await axios.get(`http://localhost:3001/api/client/${this.props.match.params.clientId}`, {
+          let response = await axios.get(`${config.HOST}api/client/${this.props.match.params.clientId}`, {
                headers: {
                     "authorization": this.state.token
                }

@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import jsCookie from 'js-cookie';
 import { withRouter } from 'react-router-dom';
+import config from '../../config';
 
 //TODO
 //1 Poner bien la fecha
@@ -75,7 +76,7 @@ class FormEditProduct extends React.Component {
 
      async getProducts(products) {
           products.map(async(productId) => {
-               let response = await axios.get(`http://localhost:3001/api/product/${productId}`, {
+               let response = await axios.get(`${config.HOST}api/product/${productId}`, {
                     headers: {
                          "authorization": this.state.token
                     }
@@ -90,7 +91,7 @@ class FormEditProduct extends React.Component {
 
      async getClient(clientId) {
           console.log(this.state)
-          let response = await axios.get(`http://localhost:3001/api/client/${clientId}`, {
+          let response = await axios.get(`${config.HOST}api/client/${clientId}`, {
                headers: {
                     "authorization": this.state.token
                }
@@ -149,7 +150,7 @@ class FormEditProduct extends React.Component {
           event.preventDefault();
           alert(this.props.saleId)
           if (this.state.dataIsEdited) {
-               axios.put(`http://localhost:3001/api/sale/${this.props.idSale}`, this.state, {
+               axios.put(`${config.HOST}api/sale/${this.props.idSale}`, this.state, {
                     headers: {
                          "authorization": this.state.token
                     }
@@ -163,7 +164,7 @@ class FormEditProduct extends React.Component {
           console.log(this.state.secureDelete)
           this.setState({ secureDelete: this.state.secureDelete + 1 })
           if (this.state.secureDelete >= 1) {
-               axios.delete(`http://localhost:3001/api/sale/${this.props.idSale}`, {
+               axios.delete(`${config.HOST}api/sale/${this.props.idSale}`, {
                     headers: {
                          "authorization": this.state.token
                     }
@@ -175,7 +176,7 @@ class FormEditProduct extends React.Component {
      }
 
      getAllClients() {
-          axios.get('http://localhost:3001/api/clients/', {
+          axios.get(config.HOST + 'api/clients/', {
                headers: {
                     "authorization": this.state.token
                }
@@ -189,7 +190,7 @@ class FormEditProduct extends React.Component {
      }
 
      getAllProducts() {
-          axios.get('http://localhost:3001/api/products/', {
+          axios.get(config.HOST+'api/products/', {
                headers: {
                     "authorization": this.state.token
                }

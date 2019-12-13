@@ -3,6 +3,7 @@ import axios from 'axios';
 import jsCookie from 'js-cookie';
 
 import FormEditSale from '../../Components/formEditSale/FormEditSale';
+import config from '../../config';
 
 class EditProduct extends React.Component {
      constructor(props) {
@@ -33,7 +34,7 @@ class EditProduct extends React.Component {
      }
 
      async getData() {
-          let response = await axios.get(`http://localhost:3001/api/sale/${this.props.match.params.saleId}`, {
+          let response = await axios.get(`${config.HOST}api/sale/${this.props.match.params.saleId}`, {
                headers: {
                     "authorization": this.state.token
                }

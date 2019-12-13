@@ -1,10 +1,11 @@
 import React from 'react';
+import config from '../../config';
 
 class Slider extends React.Component{
      constructor(props){
           super(props)
           this.state={
-               baseUrl : 'http://localhost:3001',
+               baseUrl : config.HOST,
                images:[]
           }
 

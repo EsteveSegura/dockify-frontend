@@ -3,6 +3,8 @@ import axios from 'axios';
 import { withRouter } from 'react-router-dom';
 import ActionButton from '../../Components/actionButton/ActionButton';
 
+import config from '../../config';
+
 import CardProduct from '../../Components/cardProduct/CardProduct';
 import jsCookie from 'js-cookie';
 
@@ -28,7 +30,7 @@ class Products extends React.Component{
      }
 
      componentDidMount(){
-          axios.get('http://localhost:3001/api/products/', {
+          axios.get(config.HOST + 'api/products/', {
                headers: {
                     "authorization": this.state.token
                }

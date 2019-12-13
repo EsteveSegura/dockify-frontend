@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import jsCookie from 'js-cookie';
 import { withRouter } from "react-router-dom";
+import config from '../../config';
 
 class FormAddProducts extends React.Component {
      constructor(props) {
@@ -83,7 +84,7 @@ class FormAddProducts extends React.Component {
      }
 
      handleSubmit(event) {
-          axios.post('http://localhost:3001/api/sale/', this.state, {
+          axios.post(config.HOST + 'api/sale/', this.state, {
                headers: {
                     "authorization": this.state.token
                }
@@ -112,7 +113,7 @@ class FormAddProducts extends React.Component {
      }
 
      getAllClients() {
-          axios.get('http://localhost:3001/api/clients/', {
+          axios.get(config.HOST +'api/clients/', {
                headers: {
                     "authorization": this.state.token
                }
@@ -126,7 +127,7 @@ class FormAddProducts extends React.Component {
      }
 
      getAllProducts() {
-          axios.get('http://localhost:3001/api/products/', {
+          axios.get(config.HOST + 'api/products/', {
                headers: {
                     "authorization": this.state.token
                }
